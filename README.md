@@ -2,20 +2,22 @@
 my Game &amp; Watch Script (Backup &amp; retro-go)
 
 Notes:
-- UbuntuInstall.txt is a scrappy text file with all my commands ran for an Ubuntu install under an Oracle VM VirtualBox env. for G&W Backup & retro-go
-- On script run, for each option/action, a user key-press is requested, to avoid any miss run actions => user can press Ctrl+C to abort it.
+- *UbuntuInstall.txt* is a text file with all my commands ran for an Ubuntu install under an Oracle VM VirtualBox env. for G&W Backup & retro-go
+- On any script run, for each option/action, a user key-press is requested, to avoid any miss run actions => user can press Ctrl+C to abort it.
 
 Debugger:
-- I use a ST-Link V2 (Clone) debugger
+- I use a *ST-Link V2* (Clone) debugger
 
-
+Game & Watch:
+- I use (actually) a *G&W Super Mario Bros.* version (not the new Zelda one)
 
 ## 0_menu.sh
 Aim: (my) menu / Ubuntu for the G&W Backup tools
 - Source: https://github.com/ghidraninja/game-and-watch-backup/
 
 Process:
-- Install the 0_menu.sh in root menu of your game-and-watch-backup folder
+- Install the *0_menu.sh* in root menu of your game-and-watch-backup folder
+- Make it executable (`chmod +x 0_menu.sh`)
 
 Additional used documentation:
 - a really (really) usefull video: https://www.youtube.com/watch?v=-MzmoEFs0bQ
@@ -30,8 +32,9 @@ Aim: (my) retro-go menu / Ubuntu
 - Discord: https://discord.com/channels/781528730304249886/784362150793707530
 
 Usage:
-- Install the retro-go.sh (& the optional UbuntuInstall.txt file) in root menu of your retro-go folder
-- Tune befor start script the export variables in script
+- Install the *retro-go.sh* (& the optional UbuntuInstall.txt file) in root menu of your retro-go folder
+- Make it executable (`chmod +x retro-go.sh`)
+- Tune before start script the export variables in script
 
 Note:
 - the "3 * Patch interface_stlink.cfg" option is optional, but helps me to copy in place _before all_, my dedicated .cfg file to lower my ST-Link adapter speed
