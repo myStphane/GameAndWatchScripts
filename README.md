@@ -26,4 +26,4 @@ Usage:
 - Tune befor start script the export variables in script
 
 Missing:
-- git "install" section (even if ther e is a git update one, I guess some folder(s) and "git init" actions may be enougth => need to improve my script).
+- git "install" section (even if there is a git update one, I guess some folder(s) pre-creation and "git init" actions may be "enougth" => need to improve my script).
