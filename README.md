@@ -5,6 +5,10 @@ Notes:
 - UbuntuInstall.txt is a scrappy text file with all my commands ran for an Ubuntu install under an Oracle VM VirtualBox env. for G&W Backup & retro-go
 - On script run, for each option/action, a user key-press is requested, to avoid any miss run actions => user can press Ctrl+C to abort it.
 
+Debugger:
+- I use a ST-Link V2 (Clone) debugger
+
+
 
 ## 0_menu.sh
 Aim: (my) menu / Ubuntu for the G&W Backup tools
@@ -13,7 +17,11 @@ Aim: (my) menu / Ubuntu for the G&W Backup tools
 Process:
 - Install the 0_menu.sh in root menu of your game-and-watch-backup folder
 
-
+Additional used documentation:
+- a really (really) usefull video: https://www.youtube.com/watch?v=-MzmoEFs0bQ
+- "A Novice Hacking A Game & Watch": https://docs.google.com/document/d/1-x6tibLxtOPf6ZbQL0ZM48XGe1-LLEfl8HpBg8gBu_M/edi
+- (my) Game & Watch Backup, ie, my Google Doc “step-by-step”: https://docs.google.com/document/d/1Eh8K309A5QMHd1iv1lm_Zd7EstZ42Sgaa8ed8rIN72I/
+ 
 
 ## retro-go.sh & UbuntuInstall.txt
 Aim: (my) retro-go menu / Ubuntu
