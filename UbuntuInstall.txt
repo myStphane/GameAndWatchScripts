@@ -1,0 +1,139 @@
+# Clean Ubuntu (20.04) & G&W Tools install
+## Vers. : 20211110
+## Owner : myStph
+## Note  : I use as main system a Windows 10 & install Ubuntu 20.04 within an Oracle VM VirtualBox
+## Note  : Ubuntu on Raspberry Pi is possible (not tested): https://ubuntu.com/download/raspberry-pi 
+
+
+
+# -------------------------------------------------
+# Mandatory
+
+## Install: Oracle VM VirtualBox
+### Source: https://www.virtualbox.org/
+### Note: used v6.1
+
+## Install: Ubuntu (in Oracle VM VirtualBox)
+### Note: used 20.04.2_LTS_64bits ISO
+#### URL: https://ubuntu.com/download/desktop
+#### File: ubuntu-20.04.2.0-desktop-amd64
+#### Cfg : 15Gb dynamic disk / Boot on ISO file
+
+## Possibly, deactivate Windows 10 "Hyper-V" (prevents Virtualbox from install/start Linux)
+### Sources: https://forums.virtualbox.org/viewtopic.php?f=25&t=99390
+### Sources: https://forums.virtualbox.org/viewtopic.php?f=1&t=62339#p417512
+### Pre-Check
+#### Exec: cmd.exe "run as admin"
+#### Exec: bcdedit > bcde.txt
+### Deactivate Hyper-V
+#### Note/Impact: Can install/run Ubuntu from Oracle VirtualBox, *but*, the Win10 Linux WSL is disabled
+#### Config
+##### Exec: cmd.exe "run as admin"
+##### Exec: bcdedit /set hypervisorlaunchtype off
+##### Exec: DISM /Online /Get-Features
+##### Exec: DISM /Online /Disable-Feature:Microsoft-Hyper-V
+##### Exec: shutdown -s -t 2
+#### Note: if anyone wants to reactivate it: bcdedit /set hypervisorlaunchtype auto )
+
+
+
+# -------------------------------------------------
+# Create folder(s)
+## Exec: mkdir Game-and-Watch
+## Exec: cd Game-and-Watch
+
+# Install git
+## Exec: sudo apt install git
+
+# For all needed Ubuntu packages, please check below...
+
+
+# -------------------------------------------------
+# Install "game-and-watch-backup" env.
+## Source: https://github.com/ghidraninja/game-and-watch-backup
+## Source: https://docs.google.com/document/d/1Eh8K309A5QMHd1iv1lm_Zd7EstZ42Sgaa8ed8rIN72I/edit#
+## Advice: Read carefully the README file
+
+## Exec: mkdir game-and-watch-backup
+## Exec: cd game-and-watch-backup
+## Exec: git init .
+## Exec: git fetch https://github.com/ghidraninja/game-and-watch-backup
+## Exec: git merge FETCH_HEAD
+## Exec: sudo apt-get install binutils-arm-none-eabi python3 libhidapi-hidraw0 libftdi1 libftdi1-2
+
+# Ubuntu add. packages
+## Exec: sudo apt-get install gcc-arm-none-eabi binutils-arm-none-eabi python3 libftdi1
+
+# Install OpenOCD
+## Source: https://github.com/kbeckmann/ubuntu-openocd-git-builder
+## Exec: wget https://nightly.link/kbeckmann/ubuntu-openocd-git-builder/workflows/docker/master/openocd-git.deb.zip
+## Exec: unzip openocd-git.deb.zip
+## Exec: sudo dpkg -i openocd-git_*_amd64.deb		# Note: may get an error, see below to fix err.
+## Exec: sudo apt-get -y -f install
+
+# Fix Err.
+## Exec: sudo apt install libftdi1-2
+## Exec: sudo apt install libhidapi-hidraw0
+## Exec: sudo apt --fix-broken install
+
+# Back to OpenOCD install
+## Exec: sudo dpkg -i openocd-git_*_amd64.deb
+## Exec: sudo apt-get -y -f install
+
+# Check OpenOCD installed version
+## Exec: ls -l /opt/openocd-git/
+## Exec: /opt/openocd-git/bin/openocd --vers
+
+# Common exports
+## Exec: export OPENOCD="/opt/openocd-git/bin/openocd"
+
+# Backup the G&W, follow:
+## ... the README file, "Building" part
+## Exec: ./1_sanity_check.sh
+## Exec: ./2_backup_flash.sh stlink
+## Exec: ./3_backup_internal_flash.sh stlink
+## Exec: ./4_unlock_device.sh stlink
+## Exec: ./5_restore.sh stlink
+## For rollback (in case of problem on Step 3.)
+### Note: maintain the Power Button pressed, then,
+### Exec: ./scripts/flashloader.sh stlink ./backups/flash_backup.bin
+
+
+# -------------------------------------------------
+# Install "retro-go" env.
+## Source: https://github.com/kbeckmann/game-and-watch-retro-go
+## Mandatory: having installed packages from previous sections...
+## Advice: Read carefully the README file
+
+# Common exports
+## Exec: export OPENOCD="/opt/openocd-git/bin/openocd"
+
+# Get number of CPU (or "-j" parameter)
+## Exec: grep -c ^processor /proc/cpuinfo
+
+# Install gcc (for retro-go)
+## Source: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
+## Download: gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
+## Exec: sudo tar -jxvf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory /opt/
+##       (or possibly only Exec: sudo tar -xf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 )
+
+# Common exports
+## Exec: export GCC_PATH=/home/ubuntu/game-and-watch/gcc-arm-none-eabi-10-2020-q4-major/bin
+## Exec: export PATH=$GCC_PATH:$PATH
+
+# Install make
+## Exec: sudo apt install make
+
+# Additional packages
+## Exec: sudo apt-get install git cmake autotools-dev autoconf build-essential pkg-config libasound2-dev qtbase5-dev qttools5-dev-tools libqt5svg5-dev nvidia-cg-toolkit
+## Exec: sudo apt-get install libavcodec-dev libavformat-dev libavutil-dev libswresample-dev libswscale-dev
+
+# Additional packages for "SCREENSHOT"
+## Exec: sudo apt-get update
+## Exec: sudo apt-get install python-pyelftools
+## Exec: sudo apt install python3-pip
+## Exec: sudo pip install pyelftools
+
+# Retro-go usage, follow:
+## ... the README file, "Building" part
+
