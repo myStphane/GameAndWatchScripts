@@ -25,5 +25,8 @@ Usage:
 - Install the retro-go.sh (& the optional UbuntuInstall.txt file) in root menu of your retro-go folder
 - Tune befor start script the export variables in script
 
+Note:
+- the "3 * Patch interface_stlink.cfg" option is optional, but helps me to copy in place _before all_, my dedicated .cfg file to lower my ST-Link adapter speed
+
 Missing:
 - git "install" section (even if there is a git update one, I guess some folder(s) pre-creation and "git init" actions may be "enougth" => need to improve my script).
