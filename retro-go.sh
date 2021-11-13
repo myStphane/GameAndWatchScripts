@@ -40,7 +40,7 @@ export largeflash=0
 # -------------------------------------------------
 # Leave ADAPTER variable *empty* for query on script start.
 # One may force it with: [stlink|jlink|rpi]
-export ADAPTER=stlink
+# export ADAPTER=stlink
 
 # -------------------------------------------------
 # Mandatory Folders...
