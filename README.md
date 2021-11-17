@@ -1,25 +1,24 @@
 # GameAndWatchScripts
 my Game &amp; Watch Script (Backup &amp; retro-go)
 
-Updates:
-- Take into account G&W models (mario|zelda)
-
 Notes:
-- *UbuntuInstall.txt* is a text file with all my commands ran for an Ubuntu install under an Oracle VM VirtualBox env. for G&W Backup & retro-go
 - On any script run, for each option/action, a user key-press is requested, to avoid any miss run actions => user can press Ctrl+C to abort it.
+- Debugger: I use a *ST-Link V2* (Clone) debugger, however, the debugger is always asked to user on script start
+- Game & Watch: I use (actually) a *G&W Super Mario Bros.* version (not the new Zelda one), however, the G&W model type is asked to user on script start
 
-Debugger:
-- I use a *ST-Link V2* (Clone) debugger (however, the debugger is alwas asked to user on script start)
 
-Game & Watch:
-- I use (actually) a *G&W Super Mario Bros.* version (not the new Zelda one, however, the G&W model type is asked to user on script start)
+## UbuntuInstall.txt
+- Is a text file with all my commands ran for an Ubuntu install under an Oracle VM VirtualBox env. for G&W Backup & retro-go
+- This was a step-by-step actions & commands I followed for zero toe have a fully "G&W" installed environment (moste are extracts from the G&W Backp & retro-go "README" parts & extracts from Discrod helps)
+
+
 
 ## 0_menu.sh
 Aim: (my) menu / Ubuntu for the G&W Backup tools
 - Source: https://github.com/ghidraninja/game-and-watch-backup/
 
 Process:
-- Install the *0_menu.sh* in root menu of your game-and-watch-backup folder
+- Copy the *0_menu.sh* in root menu of your game-and-watch-backup folder
 - Make it executable (`chmod +x 0_menu.sh`)
 
 Additional used documentation:
@@ -35,7 +34,7 @@ Aim: (my) retro-go menu / Ubuntu
 - Discord: https://discord.com/channels/781528730304249886/784362150793707530
 
 Usage:
-- Install the *retro-go.sh* (& the optional UbuntuInstall.txt file) in root menu of your retro-go folder
+- Copy the *retro-go.sh* (& the optional UbuntuInstall.txt file) in root menu of your retro-go folder
 - Make it executable (`chmod +x retro-go.sh`)
 - Tune before start script the export variables in script
 
