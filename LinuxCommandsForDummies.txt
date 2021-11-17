@@ -1,4 +1,3 @@
-
 # -------------------------------------------------
 # (Some) Common (linux) commands
 # 1st: Open a shell "Terminal"
