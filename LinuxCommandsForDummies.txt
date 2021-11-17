@@ -3,27 +3,27 @@
 # 1st: Open a shell "Terminal"
 
 # 2nd: here some common commands:
-## Exec: pwd						=> “where am I ?” … ie, show the full path for current folder
-## Exec: ls -l						=> list current file & sub-folders in current folder
-## Exec: lsusb						=> list current USB devices “known” by your linux system
-## Exec: ls -la /dev/|grep stlink			=> list and filter, from folder “/dev/”, any device named “stlink”
-## Exec: cp <SourceFile> <Destination>			=> copy a <File> to it’s target destination (could be a new file name, or a folder)
-## Exec: date						=> get current date & time
-## Exec: cat <YourFile>					=> show file content
-## Exec: mkdir <YourFolder>				=> will create a folder named “YourFolder” (MaKeDirectory)
-## Exec: rmdir <YourFolder>				=> to delete a folder (ReMoveDirectory)
-## Exec: rm <YourFile>					=> to delete a file (ReMove)
-## Exec: cd <YourFolder>				=> “enter/go into” your folder (ChangeDirectory)
-## Exec: cd ..						=> go back to the previous level folder (it’s “father”)
-## Exec: ./<YourScriptName>				=> execute the script “YourScriptName” from current folder (the “./” means “the current folder where I’m typing my commands” - thus, the “../” refers to the father/upper folder)
-## Exec: git init .					=> create (prepare) your folder to get a “git” repository “installed” 
-## Exec: git fetch <URL>				=> “tell (prepare) your current folder” to pre-read the content of a distant git repository URL
-## Exec: git merge FETCH_HEAD				=> “merge” (ie copy in place) the git URL content into your folder
-## Exec: sudo <YourCommands>				=> the “sudo” order allow you to execute commands as “root” user
-## Exec: sudo apt <RequestedPackages>			=> update/install Linux package(s) (ie, programs, application, scripts, …)
-## Exec: wget <URL>					=> download locally content from an URL
-## Exec: export VarName=<VarContent>			=> create an environment variable named “VarName” and assign its content
-## Exec: make <Commands>				=> perform a code compilation
+## pwd						=> “where am I ?” … ie, show the full path for current folder
+## ls -l					=> list current file & sub-folders in current folder
+## lsusb					=> list current USB devices “known” by your linux system
+## ls -la /dev/|grep stlink			=> list and filter, from folder “/dev/”, any device named “stlink”
+## cp <SourceFile> <Destination>		=> copy a <File> to it’s target destination (could be a new file name, or a folder)
+## date						=> get current date & time
+## cat <YourFile>				=> show file content
+## mkdir <YourFolder>				=> will create a folder named “YourFolder” (MaKeDirectory)
+## rmdir <YourFolder>				=> to delete a folder (ReMoveDirectory)
+## rm <YourFile>				=> to delete a file (ReMove)
+## cd <YourFolder>				=> “enter/go into” your folder (ChangeDirectory)
+## cd ..					=> go back to the previous level folder (it’s “father”)
+## ./<YourScriptName>				=> execute the script “YourScriptName” from current folder (the “./” means “the current folder where I’m typing my commands” - thus, the “../” refers to the father/upper folder)
+## git init .					=> create (prepare) your folder to get a “git” repository “installed” 
+## git fetch <URL>				=> “tell (prepare) your current folder” to pre-read the content of a distant git repository URL
+## git merge FETCH_HEAD				=> “merge” (ie copy in place) the git URL content into your folder
+## sudo <YourCommands>				=> the “sudo” order allow you to execute commands as “root” user
+## sudo apt <RequestedPackages>			=> update/install Linux package(s) (ie, programs, application, scripts, …)
+## wget <URL>					=> download locally content from an URL
+## export VarName=<VarContent>			=> create an environment variable named “VarName” and assign its content
+## make <Commands>				=> perform a code compilation
 
 
 # -------------------------------------------------
