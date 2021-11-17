@@ -7,7 +7,7 @@ Notes:
 - Game & Watch: I use (actually) a *G&W Super Mario Bros.* version (not the new Zelda one), however, the G&W model type is asked to user on script start
 
 
-## Backup(& unlock) + Ubuntu guides
+## Main sources for Backup(& unlock), retro-go + Ubuntu guides
 - Backup: https://github.com/ghidraninja/game-and-watch-backup (the README)
 - retro-go: https://github.com/kbeckmann/game-and-watch-retro-go (the README)
 - (video) https://www.youtube.com/watch?v=-MzmoEFs0bQ (mainly from 2:17 to 4:25)
