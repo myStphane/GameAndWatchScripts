@@ -56,3 +56,4 @@ Note:
 
 Missing:
 - git "install" section (even if there is a git update one, I guess some folder(s) pre-creation and "git init" actions may be "enougth" => need to improve my script).
+- nevertheless, one can follow the _README_ docs. from both G&W git repositories & my current _UbuntuInstall.txt_ file
