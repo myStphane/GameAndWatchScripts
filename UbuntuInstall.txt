@@ -1,5 +1,5 @@
 # Clean Ubuntu (20.04) & G&W Tools install
-## Vers. : 20211110
+## Vers. : 20211117
 ## Owner : myStph
 ## Note  : I use as main system a Windows 10 & install Ubuntu 20.04 within an Oracle VM VirtualBox
 ## Note  : Ubuntu on Raspberry Pi is possible (not tested): https://ubuntu.com/download/raspberry-pi 
@@ -19,7 +19,7 @@
 #### File: ubuntu-20.04.2.0-desktop-amd64
 #### Cfg : 15Gb dynamic disk / Boot on ISO file
 
-## Possibly, deactivate Windows 10 "Hyper-V" (prevents Virtualbox from install/start Linux)
+## Possibly (unfortunately was my case), have to deactivate Windows 10 "Hyper-V" (as this prevents Virtualbox from install/start Linux)
 ### Sources: https://forums.virtualbox.org/viewtopic.php?f=25&t=99390
 ### Sources: https://forums.virtualbox.org/viewtopic.php?f=1&t=62339#p417512
 ### Pre-Check
@@ -38,7 +38,7 @@
 
 
 # -------------------------------------------------
-# Create folder(s)
+# Create (main) folder
 ## Exec: mkdir Game-and-Watch
 ## Exec: cd Game-and-Watch
 
@@ -46,6 +46,21 @@
 ## Exec: sudo apt install git
 
 # For all needed Ubuntu packages, please check below...
+
+
+
+# -------------------------------------------------
+# Check (USB) installed debugger under Oracel VM VirtualBox & within Ubuntu
+## Plug the USB debugger on your system
+## 1. Check in Oracle VM VirtualBox
+### In menu: USB / "<DebuggerName>"
+### There must be a checkmark on left of the "<DebuggerName>" line
+## 2. Check within Ubuntu
+## Exec: lsusb
+###  eg:         Bus 001 Device 033: ID 0483:3748 STMicroelectronics ST-LINK/V2
+## Exec: ls -la /dev/|grep <debugger within: stlink, jlink,rpi>
+###  eg:         lrwxrwxrwx   1 root    root          15 nov.  17 11:20 stlinkv2_2 -> bus/usb/001/033
+
 
 
 # -------------------------------------------------
@@ -90,13 +105,16 @@
 # Backup the G&W, follow:
 ## ... the README file, "Building" part
 ## Exec: ./1_sanity_check.sh
-## Exec: ./2_backup_flash.sh stlink
-## Exec: ./3_backup_internal_flash.sh stlink
-## Exec: ./4_unlock_device.sh stlink
-## Exec: ./5_restore.sh stlink
+## Exec: ./2_backup_flash.sh <debugger> <mario|zelda>
+## Exec: ./3_backup_internal_flash.sh <debugger> <mario|zelda>
+## Exec: ./4_unlock_device.sh <debugger> <mario|zelda>
+## Exec: ./5_restore.sh <debugger> <mario|zelda>
 ## For rollback (in case of problem on Step 3.)
-### Note: maintain the Power Button pressed, then,
-### Exec: ./scripts/flashloader.sh stlink ./backups/flash_backup.bin
+### Exec: ./restore_only_external_flash.sh <debugger> <mario|zelda>
+### Deprecated (no more used):
+#### Note: maintain the Power Button pressed, then,
+#### Exec: ./scripts/flashloader.sh stlink ./backups/flash_backup.bin)
+
 
 
 # -------------------------------------------------
@@ -108,10 +126,7 @@
 # Common exports
 ## Exec: export OPENOCD="/opt/openocd-git/bin/openocd"
 
-# Get number of CPU (or "-j" parameter)
-## Exec: grep -c ^processor /proc/cpuinfo
-
-# Install gcc (for retro-go)
+# Get & Install gcc (for retro-go)
 ## Source: https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads
 ## Download: gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
 ## Exec: sudo tar -jxvf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory /opt/
@@ -134,6 +149,9 @@
 ## Exec: sudo apt install python3-pip
 ## Exec: sudo pip install pyelftools
 
+# Get number of CPU (or "-j" parameter for the "How to build" part)
+## Exec: grep -c ^processor /proc/cpuinfo
+
 # Retro-go usage, follow:
-## ... the README file, "Building" part
+## => README file, "How to build" part
 
