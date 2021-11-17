@@ -7,7 +7,7 @@
 ## Exec: ls -l						=> list current file & sub-folders in current folder
 ## Exec: lsusb						=> list current USB devices “known” by your linux system
 ## Exec: ls -la /dev/|grep stlink			=> list and filter, from folder “/dev/”, any device named “stlink”
-## Exec: cp <SourceFile> <Destination>	=> copy a <File> to it’s target destination (could be a new file name, or a folder)
+## Exec: cp <SourceFile> <Destination>			=> copy a <File> to it’s target destination (could be a new file name, or a folder)
 ## Exec: date						=> get current date & time
 ## Exec: cat <YourFile>					=> show file content
 ## Exec: mkdir <YourFolder>				=> will create a folder named “YourFolder” (MaKeDirectory)
