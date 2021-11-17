@@ -7,6 +7,15 @@ Notes:
 - Game & Watch: I use (actually) a *G&W Super Mario Bros.* version (not the new Zelda one), however, the G&W model type is asked to user on script start
 
 
+## Backup(& unlock) + Ubuntu guides
+- Backup: https://github.com/ghidraninja/game-and-watch-backup (the README)
+- retro-go: https://github.com/kbeckmann/game-and-watch-retro-go (the README)
+- (video) https://www.youtube.com/watch?v=-MzmoEFs0bQ (mainly from 2:17 to 4:25)
+- (Discord channed) pinned guide: https://docs.google.com/document/d/1-x6tibLxtOPf6ZbQL0ZM48XGe1-LLEfl8HpBg8gBu_M/edit
+- (my) Backup & unlock Google Doc: https://docs.google.com/document/d/1Eh8K309A5QMHd1iv1lm_Zd7EstZ42Sgaa8ed8rIN72I/edit#
+- (my) Ubuntu guide: check current _UbuntuInstall.txt_ file
+
+
 ## UbuntuInstall.txt
 - Is a text file with all my commands ran for an Ubuntu install under an Oracle VM VirtualBox env. for G&W Backup & retro-go
 - This was a step-by-step actions & commands I followed for zero toe have a fully "G&W" installed environment (moste are extracts from the G&W Backp & retro-go "README" parts & extracts from Discrod helps)
@@ -16,6 +25,10 @@ Notes:
 ## 0_menu.sh
 Aim: (my) menu / Ubuntu for the G&W Backup tools
 - Source: https://github.com/ghidraninja/game-and-watch-backup/
+
+Mandatory:
+- Having flashed (& backup/unlocked) your device
+
 
 Process:
 - Copy the *0_menu.sh* in root menu of your game-and-watch-backup folder
