@@ -2,7 +2,7 @@
 # Source : https://github.com/kbeckmann/game-and-watch-retro-go
 # Discord: https://discord.com/channels/781528730304249886/784362150793707530
 # -------------------------------------------------
-# Script: 20211107
+# Script: 20211117
 # Owner : myStph
 # -------------------------------------------------
 
@@ -13,7 +13,7 @@
 # =================================================
 ## WARNING: if change one parameters => perform a 'make clean'
 ## Note: further (below) usage for variables is:
-### $ time make -j$nproc COMPRESS=$compress LARGE_FLASH=$largeflash CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot [flash]
+### $ time make -j$nproc COMPRESS=$compress GNW_TARGET=$gnwtarget EXTFLASH_SIZE_MB=$extflashMB CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot [flash]
 ## Tips: search below in file for "time make"
 
 # Number of CPU for compilation
@@ -34,13 +34,19 @@ export checktools=1
 # Can be ignored by setting =0
 export screenshot=0
 
-# Having soldered a bigger chip?
-export largeflash=0
+# GNW_TARGET=[mario|zelda]
+## export gnwtarget=mario
+
+# Deprecated: (if use the git handling the GNW_TARGET variable)
+## Having soldered a bigger chip or using Zelda G&W?
+## Default is: for G&W Mario = 1 (for 1Mb) / for G&W Zelda = 4 (for 4Mb)
+# export extflashMB=1
 
 # -------------------------------------------------
 # Leave ADAPTER variable *empty* for query on script start.
 # One may force it with: [stlink|jlink|rpi]
 # export ADAPTER=stlink
+export ADAPTER=
 
 # -------------------------------------------------
 # Mandatory Folders...
@@ -104,11 +110,12 @@ function _myRetroGoKeys() {
 
 # =================================================
 function _mySanityCheckListVar() {
-	echo "# nproc        = $nproc   (number of CPU for compilation)"
-	echo "# compress     = $compress (use .lz4 or .zopfli compress for roms?)"
-	echo "# checktools   = $checktools   (check installed tools?)"
-	echo "# screenshot   = $screenshot   (allow to take a screenshot?)"
-	echo "# largeflash   = $largeflash   (having soldered a bigger chip?)"
+	echo "# nproc        = $nproc	(number of CPU for compilation)"
+	echo "# compress     = $compress	(use .lz4 or .zopfli compress for roms?)"
+	echo "# checktools   = $checktools	(check installed tools?)"
+	echo "# screenshot   = $screenshot	(allow to take a screenshot?)"
+	echo "# gnwtarget    = $gnwtarget	(mario|zelda?)"
+	# echo "# extflashMB   = $extflashMB	(external Flash size, in MB / default G&W Mario=1, Zelda=4)"
 	echo "# ADAPTER      = $ADAPTER"
 }
 # -------------------------------------------------
@@ -140,10 +147,8 @@ function _mySanityCheckGit() {
 	echo "	local  git log game-and-watch-retro-go:    $git_local ${git_cmp}"
 	echo "	`git log|sed "s/commit //g"|head -3|tail -1`"
 }	
-function _mySanityCheckSTLink() {
-	# echo "### --- (command: 'ls -l /dev/|grep stlink') ---"
-	# ls -la /dev/|grep stlink
-	export RetVal=`ls -la /dev/|grep stlink`
+function _mySanityCheckDebugger() {
+	export RetVal=`ls -la /dev/|grep ${debugger}`
 	if [ "-#$RetVal#-" == "-##-" ] ; then
 		echo "                                                                                             (KO: incorrectly detected)"
 	else
@@ -199,16 +204,15 @@ function _mySanityCheck() {
 	echo "1.6) List 'openocd' process"
 	_mySanityCheckOpenocd
 
-	if [ "-#${ADAPTER}#-" == "-#stlink#-" ] ; then
-		echo
-		echo "1.7) ST-link V2"
-		echo "# STLink-V2 and Oracle VM VirtualBox"
-		echo "## USB 'ST-LINK V2' device  : Led *should* remains fixed blue (else: reboot host/VM)"
-		echo "## Oracle VirtualBox GUI    : Checked 'Devices/USB/STMicroelectronics STM32 STLink [0100]'"
-		echo "## Ubuntu Linux OS /dev/    : ls -l /dev/|grep stlink (ex: 'stlinkv2_2 -> bus/usb/001/004')"
-		echo "### Note: if next line empty: STLink-V2 not detected/mounted"
-		_mySanityCheckSTLink
-	fi
+	echo
+	echo "1.7) Debugger"
+	echo "# Debugger = ${debugger} (mandatory: filled)"
+	_mySanityCheckDebugger
+	echo
+	echo "# Ex. details for 'STLink-V2' and Oracle VM VirtualBox"
+	echo "## USB 'ST-LINK V2' device  : Led *should* remains fixed blue (else: reboot host/VM)"
+	echo "## Oracle VirtualBox GUI    : Checked 'Devices/USB/STMicroelectronics STM32 STLink [0100]'"
+	echo "## Ubuntu Linux OS /dev/    : ls -l /dev/|grep stlink (ex: 'stlinkv2_2 -> bus/usb/001/004')"
 
 	echo
 	#echo "# WARNING: If get any error: check your git version, path install for OpenOCD & GCC, G&W Up & powered, STLink USB & cables connected, led not blinking..."
@@ -253,17 +257,19 @@ function _UpdateGWMakeGitRetroGo() {
 	git submodule update --init --recursive
 	echo "# make clean"
 	time make clean
-	echo "# make -j$nproc COMPRESS=$compress LARGE_FLASH=$largeflash CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot"
-	time make -j$nproc COMPRESS=$compress LARGE_FLASH=$largeflash CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot
+	# EXTFLASH_SIZE_MB=$extflashMB 
+	echo "# make -j$nproc COMPRESS=$compress GNW_TARGET=$gnwtarget CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot"
+	time make -j$nproc COMPRESS=$compress GNW_TARGET=$gnwtarget CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot
 }
 # -------------------------------------------------
 function _UpdateGWMakeFlashRetroGoRom() {
-	echo "# Exec. ? = \`time make -j$nproc COMPRESS=$compress LARGE_FLASH=$largeflash CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot flash\`"
+	# EXTFLASH_SIZE_MB=$extflashMB
+	echo "# Exec. ? = \`time make -j$nproc COMPRESS=$compress GNW_TARGET=$gnwtarget CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot flash\`"
 	echo
 	_myPause
 	# Deprecated: time make -j$nproc flash_all
 	# make clean
-	time make -j$nproc COMPRESS=$compress LARGE_FLASH=$largeflash CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot flash
+	time make -j$nproc COMPRESS=$compress GNW_TARGET=$gnwtarget CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot flash
 	echo
 }
 
@@ -444,11 +450,13 @@ function _BackupGWFolderAsTgz() {
 	echo
 	echo "# WARNING: Bkp may takes 2+ minutes..."
 	_myPause
+
 	mkdir -p $BKP_FolderDate 2>/dev/null
 	echo "# Get folders git commit ids"
 	echo "# local  git log game-and-watch-backup: `git --git-dir ../game-and-watch-backup/.git log|sed "s/commit //g"|head -4`" > $BKP_FolderDate/game-and-watch.git
 	echo "# local  git log game-and-watch-flashloader: `git --git-dir ../game-and-watch-flashloader/.git log|sed "s/commit //g"|head -4`" >> $BKP_FolderDate/game-and-watch.git
 	echo "# local  git log game-and-watch-retro-go: `git log|sed "s/commit //g"|head -4`" >> $BKP_FolderDate/game-and-watch.git
+
 	echo "# Process game-and-watch-mytools.tgz"
 	cp ../game-and-watch-mytools/retro-go.sh ../game-and-watch-mytools/retro-go.sh_ORIG
 	cp retro-go.sh ../game-and-watch-mytools
@@ -459,8 +467,7 @@ function _BackupGWFolderAsTgz() {
 	tar -czf ${BKP_FolderDate}/game-and-watch-flashloader_`git --git-dir ../game-and-watch-flashloader/.git log|head -1|cut -b8-14`.tgz ../game-and-watch-flashloader/ 2>/dev/null
 	echo "# Process game-and-watch-retro-go_<git commit id>.tgz"
 	tar -czf ${BKP_FolderDate}/game-and-watch-retro-go_`git log|head -1|cut -b8-14`.tgz ../game-and-watch-retro-go/ 2>/dev/null
-	# echo "# Check"
-	# ls -l ${BKP_FolderDate}
+
 	echo "# List ${BKP_NbToList} lasts backups folders from ${BKP_Folder}"
 	ls -ltr ${BKP_Folder}|grep -v "\./"|tail -${BKP_NbToList}
 }
@@ -495,8 +502,9 @@ function _ScreenshotDump() {
 }
 # -------------------------------------------------
 function _ScreenshotDumpFullVar() {
-	echo "# make -j$nproc COMPRESS=$compress LARGE_FLASH=$largeflash CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot dump_screenshot"
-	time make -j$nproc COMPRESS=$compress LARGE_FLASH=$largeflash CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot dump_screenshot
+	# EXTFLASH_SIZE_MB=$extflashMB
+	echo "# make -j$nproc COMPRESS=$compress GNW_TARGET=$gnwtarget CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot dump_screenshot"
+	time make -j$nproc COMPRESS=$compress GNW_TARGET=$gnwtarget CHECK_TOOLS=$checktools ENABLE_SCREENSHOT=$screenshot dump_screenshot
 	echo
 	_ScreenshotList
 }
@@ -703,6 +711,7 @@ function _QueryDebuggerAdapter() {
 		"1" " ST-Link" \
 		"2" " J-Link" \
 		"3" " Raspberry pi" \
+		"" " " \
 		" " " Exit" 3>&1 1>&2 2>&3)
 	exitstatus=$?
 	if [ $exitstatus = 0 ]; then
@@ -724,7 +733,32 @@ fi
 
 
 
-
+# =================================================
+# SELECT G&W [mario|zelda]
+# =================================================
+stay=true
+function _QueryGnW() {
+	OPTION=$(whiptail --nocancel \
+		--title "Game & Watch model" \
+		--menu "\nChoose a G&W (mario|zelda) :" 14 60 4 \
+		"1" " mario" \
+		"2" " zelda" \
+	 	""  "" \
+		" " " Exit" 3>&1 1>&2 2>&3)
+	exitstatus=$?
+	if [ $exitstatus = 0 ]; then
+		case $OPTION in
+			1)	gnwtarget=mario ;;
+			2)	gnwtarget=zelda ;;
+			" ")	echo "Exit..." & stay=false ;;
+		esac
+	else
+		echo "Exit(ESC)..."
+		stay=false
+	fi
+	export GNW_TARGET=$gnwtarget 
+}
+_QueryGnW
 
 # =================================================
 # MAIN MENU
@@ -734,8 +768,8 @@ do
 	OPTION=$(whiptail --nocancel \
 	--title "Game & Watch retro-go" \
 	--menu "\nChoose an action :" 23 90 14 \
-	 "0" " # Misc. options sub-menu" \
-	 "1" " ? Quick Sanity check" \
+	 "0" " ? Quick Sanity check" \
+	 "1" " # Misc. options sub-menu" \
 	 ""  "" \
 	 "2" " * git Update game-and-watch-flashloader            (git pull+clean+make)" \
 	 "3" " * Patch interface_stlink.cfg                         (adapter speed 200)" \
@@ -755,26 +789,24 @@ do
 	if [ $exitstatus = 0 ]; then
 		case $OPTION in
 		# -------------------------------------------------
-		0)	_mySeparator
-			echo "0) Misc. options sub-menu"
+		1)	_mySeparator
+			echo "1) Misc. options sub-menu"
 			# _myPause
 			_MiscOptions
 		;;
 
 		# -------------------------------------------------
-		1)	_mySeparator
-			echo "1) Quick Sanity check"
+		0)	_mySeparator
+			echo "0) Quick Sanity check"
 			# _myPause
 			_mySanityCheckListVar
 			echo
 			_mySanityCheckGit
 			echo
 			_mySanityCheckOpenocd
-			if [ "-#${ADAPTER}#-" == "-#stlink#-" ] ; then
-				echo
-				echo "# ST-link V2 (mandatory: filled)"
-				_mySanityCheckSTLink
-			fi
+			echo
+			echo "# Debugger = ${debugger} (mandatory: filled)"
+			_mySanityCheckDebugger
 			echo
 		;;
 
