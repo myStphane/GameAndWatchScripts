@@ -1,5 +1,5 @@
-# GameAndWatchScripts
-my Game &amp; Watch Script (Backup &amp; retro-go)
+# GameAndWatch
+my Game &amp; Watch Script (Backup &amp; retro-go) & other "help" files
 
 Notes:
 - On any script run, for each option/action, a user key-press is requested, to avoid any miss run actions => user can press Ctrl+C to abort it.
@@ -13,7 +13,7 @@ Notes:
 - (video) https://www.youtube.com/watch?v=-MzmoEFs0bQ (mainly from 2:17 to 4:25)
 - (Discord channed) pinned guide: https://docs.google.com/document/d/1-x6tibLxtOPf6ZbQL0ZM48XGe1-LLEfl8HpBg8gBu_M/edit
 - (my) Backup & unlock Google Doc: https://docs.google.com/document/d/1Eh8K309A5QMHd1iv1lm_Zd7EstZ42Sgaa8ed8rIN72I/edit#
-- (my) Ubuntu guide: check current _UbuntuInstall.txt_ file
+- (my) Ubuntu (install) guide: check current _UbuntuInstall.txt_ file
 
 
 ## LinuxCommandsForDummies.txt 
