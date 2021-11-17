@@ -1,15 +1,18 @@
 # GameAndWatchScripts
 my Game &amp; Watch Script (Backup &amp; retro-go)
 
+Updates:
+- Take into account G&W models (mario|zelda)
+
 Notes:
 - *UbuntuInstall.txt* is a text file with all my commands ran for an Ubuntu install under an Oracle VM VirtualBox env. for G&W Backup & retro-go
 - On any script run, for each option/action, a user key-press is requested, to avoid any miss run actions => user can press Ctrl+C to abort it.
 
 Debugger:
-- I use a *ST-Link V2* (Clone) debugger
+- I use a *ST-Link V2* (Clone) debugger (however, the debugger is alwas asked to user on script start)
 
 Game & Watch:
-- I use (actually) a *G&W Super Mario Bros.* version (not the new Zelda one)
+- I use (actually) a *G&W Super Mario Bros.* version (not the new Zelda one, however, the G&W model type is asked to user on script start)
 
 ## 0_menu.sh
 Aim: (my) menu / Ubuntu for the G&W Backup tools
