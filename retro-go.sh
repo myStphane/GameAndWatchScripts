@@ -2,7 +2,7 @@
 # Source : https://github.com/kbeckmann/game-and-watch-retro-go
 # Discord: https://discord.com/channels/781528730304249886/784362150793707530
 # -------------------------------------------------
-# Script: 20211117
+# Script: 20211118
 # Owner : myStph
 # -------------------------------------------------
 
@@ -34,13 +34,13 @@ export checktools=1
 # Can be ignored by setting =0
 export screenshot=0
 
-# GNW_TARGET=[mario|zelda]
+# Choose the G&W Device
+## GNW_TARGET=[mario|zelda]
 ## export gnwtarget=mario
-
 # Deprecated: (if use the git handling the GNW_TARGET variable)
 ## Having soldered a bigger chip or using Zelda G&W?
 ## Default is: for G&W Mario = 1 (for 1Mb) / for G&W Zelda = 4 (for 4Mb)
-# export extflashMB=1
+## export extflashMB=1
 
 # -------------------------------------------------
 # Leave ADAPTER variable *empty* for query on script start.
@@ -110,13 +110,15 @@ function _myRetroGoKeys() {
 
 # =================================================
 function _mySanityCheckListVar() {
-	echo "# nproc        = $nproc	(number of CPU for compilation)"
-	echo "# compress     = $compress	(use .lz4 or .zopfli compress for roms?)"
+	echo "# nproc        = $nproc	(number of CPU core for compilation)"
 	echo "# checktools   = $checktools	(check installed tools?)"
 	echo "# screenshot   = $screenshot	(allow to take a screenshot?)"
+	echo "# compress     = $compress	(use .lz4 or .zopfli compress for roms?)"
 	echo "# gnwtarget    = $gnwtarget	(mario|zelda?)"
 	# echo "# extflashMB   = $extflashMB	(external Flash size, in MB / default G&W Mario=1, Zelda=4)"
 	echo "# ADAPTER      = $ADAPTER"
+	echo "# OPENOCD      = $OPENOCD"
+	echo "# GCC_PATH     = $GCC_PATH"
 }
 # -------------------------------------------------
 function _mySanityCheckListFolders() {
@@ -129,6 +131,13 @@ function _mySanityCheckListFolders() {
 	echo "# BKP_NbToList = ${BKP_NbToList}"
 }
 # -------------------------------------------------
+function _mySanityCheckVar() {
+	echo "# openocd -v               (\$OPENOCD)"
+	$OPENOCD -v 2>&1|grep Open|head -1|sed "s/^/        /g"
+	echo
+	echo "# arm-none-eabi-gcc --vers (\$GCC_PATH)"
+	$GCC_PATH/arm-none-eabi-gcc --vers|head -1|sed "s/^/        /g"
+}
 function _mySanityCheckGit() {
 	git_github=`git ls-remote git://${URL_flashloader}|head -1|awk '{print $1}'`
 	git_github=`git ls-remote git://${URL_flashloader}|head -1|awk '{print $1}'`
@@ -148,15 +157,19 @@ function _mySanityCheckGit() {
 	echo "	`git log|sed "s/commit //g"|head -3|tail -1`"
 }	
 function _mySanityCheckDebugger() {
+	echo "# Debugger = ${debugger}      (mandatory: filled / 'ls -la /dev/|grep ${debugger}')"
 	export RetVal=`ls -la /dev/|grep ${debugger}`
 	if [ "-#$RetVal#-" == "-##-" ] ; then
 		echo "                                                                                             (KO: incorrectly detected)"
 	else
 		echo "        $RetVal (OK)"
 	fi
+	echo
+	echo "# USB devices (lsusb)"
+	lsusb|sed "s/^/        /g"
 }
 function _mySanityCheckOpenocd() {
-	echo "# List 'openocd' process (mandatory: empty)"
+	echo "# List 'openocd' process (mandatory: empty  / 'ps -e | grep openocd')"
 	# ps -e | grep openocd|sed "s/^/        /"
 	export RetVal=`ps -e | grep openocd`
 	if [ "-#$RetVal#-" == "-##-" ] ; then
@@ -206,7 +219,6 @@ function _mySanityCheck() {
 
 	echo
 	echo "1.7) Debugger"
-	echo "# Debugger = ${debugger} (mandatory: filled)"
 	_mySanityCheckDebugger
 	echo
 	echo "# Ex. details for 'STLink-V2' and Oracle VM VirtualBox"
@@ -497,7 +509,7 @@ function _ScreenshotDump() {
 		_ScreenshotList
 	else
 		echo
-		echo "# make dump_screenshot KO: needs needs: ENABLE_SCREENSHOT=1"
+		echo "# make dump_screenshot KO (needs to set & flash with variable: ENABLE_SCREENSHOT=1)"
 	fi
 }
 # -------------------------------------------------
@@ -550,28 +562,33 @@ function _KillOpenocd() {
 function _MiscOptions() {
 	OPTION=$(whiptail --nocancel \
 		--title "Game & Watch retro-go Options" \
-		--menu "\nChoose an action :" 32 90 23 \
-		 "0" " ? Full Sanity check                           (env., git, OpenOCD & GCC)" \
+		--menu "\nChoose an action :" 37 90 28 \
+		 "0" " ? List retro-go Keys & Macro" \
 		 ""  "" \
 		 "1" " # List share available roms                 (all: gb, gg, nes, pce, sms)" \
 		 "2" " ? List local ./save_states & ./roms                            (current)" \
 		 "3" " * Open 'shell' to copy roms locally" \
 		 ""  "" \
-		 "4" " + Backup ./build (~.elf) & ./roms & ./save_states                 (.sav)" \
-		 "5" " + Backup folders game-and-watch-* (~.git)                         (.tgz)" \
-		 "6" " + Backup (move) screenshots                                (.bin & .png)" \
+		 "4" " > Backup ./build (~.elf) & ./roms & ./save_states                 (.sav)" \
+		 "5" " > Backup folders game-and-watch-* (~.git)                         (.tgz)" \
+		 "6" " > Backup (move) screenshots                                (.bin & .png)" \
 		 "7" " ? List all performed backups                               (.sav & .tgz)" \
 		 "8" " ? List 2 lasts local screenshots                                  (.png)" \
 		 ""  "" \
-		 "9" " ? Show 'make help'" \
-		"10" " ? List retro-go Keys & Macro" \
+		 "9" " ? Full Sanity check                           (env., git, OpenOCD & GCC)" \
+		"10" " ? Show 'make help'                                           (make help)" \
 		""   "" \
 		"11" " # Query Debugger Adapter                 (ST-Link, J-Link, Raspberry pi)" \
+		"12" " x List & Kill any 'openocd' process" \
 		""   "" \
-		"12" " ? Ubuntu mandatory packages list" \
-		"13" " x List & Kill any 'openocd' process" \
-		"14" " x Clean retro-go                                            (make clean)" \
-		"15" " x Reset the unit                                        (make reset_mcu)" \
+		"14" " < make reset_mcu (Reset/Restart only the unit)          (make reset_mcu)" \
+		"15" " x make clean   (reset compil' env., no G&W flash)           (make clean)" \
+		"16" " x make         (create .elf, no G&W flash)                    (make -j${nproc})" \
+		"17" " < make flash   (create .elf, G&W flash)                 (make -j${nproc} flash)" \
+		"18" " x make verbose (idem 'make' + traces)                   (make VERBOSE=1)" \
+		"19" " ? Print/Information size (.elf)                              (make size)" \
+		""   "" \
+		"20" " ? List (my) Ubuntu mandatory packages list" \
 		""   "" \
 		" " " Back to main menu" 3>&1 1>&2 2>&3)
 	exitstatus=$?
@@ -579,8 +596,8 @@ function _MiscOptions() {
 		case $OPTION in
 			# -------------------------------------------------
 			0)	_mySeparator
-				echo "0) Sanity Check"
-				_mySanityCheck
+				echo "0) Retro-go Keys & Macros"
+				_myRetroGoKeys
 			;;
 
 			# -------------------------------------------------
@@ -636,15 +653,15 @@ function _MiscOptions() {
 
 			# -------------------------------------------------
 			9)	_mySeparator
-				echo "9) Show 'make help'"
-				# _myPause
-				make help
+				echo "9) Sanity Check"
+				_mySanityCheck
 			;;
 
 			# -------------------------------------------------
 			10)	_mySeparator
-				echo "10) Retro-go Keys & Macros"
-				_myRetroGoKeys
+				echo "10) Show 'make help'"
+				# _myPause
+				make help
 			;;
 
 			# -------------------------------------------------
@@ -661,32 +678,61 @@ function _MiscOptions() {
 
 			# -------------------------------------------------
 			12)	_mySeparator
-				echo "12) Ubuntu mandatory packages list"
-				cat UbuntuInstall.txt
-				# _myPause
-			;;
-
-			# -------------------------------------------------
-			13)	_mySeparator
-				echo "13) Kill 'openocd' process"
+				echo "12) Kill 'openocd' process"
 				# _myPause
 				_KillOpenocd
 			;;
 
 			# -------------------------------------------------
 			14)	_mySeparator
-				echo "14) make clean"
+				echo "14) Reset the unit (reset/restart G&W, keep retro-go)"
+				echo "# make reset_mcu"
+				 _myPause
+				make reset_mcu
+				echo "# reset done"
+			;;
+
+			# -------------------------------------------------
+			15)	_mySeparator
+				echo "15) make clean (clean env.)"
 				_myPause
 				time make clean
 			;;
 
 			# -------------------------------------------------
-			15)	_mySeparator
-				echo "15) Reset the unit ?"
-				echo "# make reset_mcu"
+			16)	_mySeparator
+				echo "16) make -j${nproc} (create .elf, no G&W flash)"
 				 _myPause
-				make reset_mcu
-				echo "# reset done"
+				make -j${nproc}
+			;;
+
+			# -------------------------------------------------
+			17)	_mySeparator
+				echo "17) make -j${nproc} flash (create .elf, flash G&W)"
+				 _myPause
+				make -j${nproc} flash
+			;;
+
+			# -------------------------------------------------
+			18)	_mySeparator
+				echo "18) make VERBOSE=1 > make_verbose.txt"
+				 _myPause
+				make VERBOSE=1 > make_verbose.txt
+			;;
+
+			# -------------------------------------------------
+			19)	_mySeparator
+				echo "19) Print size (for current built .elf file)"
+				echo "# make size"
+				 _myPause
+				make size
+			;;
+
+			# -------------------------------------------------
+			20)	_mySeparator
+				echo "20) Ubuntu mandatory packages list"
+				cat UbuntuInstall.txt
+				# _myPause
 			;;
 
 			" ")	echo "# Exit...";;
@@ -775,7 +821,7 @@ do
 	 "3" " * Patch interface_stlink.cfg                         (adapter speed 200)" \
 	 "4" " * git Update game-and-watch-retro-go               (git pull+clean+make)" \
 	 ""  "" \
-	 "5" " * Build (retro-go+rom) & flash *to* G&W                     (make flash)" \
+	 "5" " < Build (retro-go+rom) & flash *to* G&W                     (make flash)" \
 	 "6" " < Restore Save states *to*   G&W                      (saves_restore.sh)" \
 	 ""  "" \
 	 "7" " > Backup  Save states *from* G&W                       (saves_backup.sh)" \
@@ -789,25 +835,26 @@ do
 	if [ $exitstatus = 0 ]; then
 		case $OPTION in
 		# -------------------------------------------------
-		1)	_mySeparator
-			echo "1) Misc. options sub-menu"
-			# _myPause
-			_MiscOptions
-		;;
-
-		# -------------------------------------------------
 		0)	_mySeparator
 			echo "0) Quick Sanity check"
 			# _myPause
 			_mySanityCheckListVar
 			echo
+			_mySanityCheckVar
+			echo
 			_mySanityCheckGit
 			echo
 			_mySanityCheckOpenocd
 			echo
-			echo "# Debugger = ${debugger} (mandatory: filled)"
 			_mySanityCheckDebugger
 			echo
+		;;
+
+		# -------------------------------------------------
+		1)	_mySeparator
+			echo "1) Misc. options sub-menu"
+			# _myPause
+			_MiscOptions
 		;;
 
 		# -------------------------------------------------
