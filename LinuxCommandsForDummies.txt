@@ -24,6 +24,7 @@
 ## wget <URL>					=> download locally content from an URL
 ## export VarName=<VarContent>			=> create an environment variable named “VarName” and assign its content
 ## make <Commands>				=> perform a code compilation
+## cd ~					=> go back to your "home" user folder
 
 
 # -------------------------------------------------
