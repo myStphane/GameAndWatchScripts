@@ -100,8 +100,10 @@ function _myRetroGoKeys() {
 	echo "## TIME  : SELECT/Pause game"
 	echo "## PAUSE : Emulator menu (Save/Reload/Options.../Quit)"
 	echo
-	echo "## Note  : Press G&W Power button   : the state of the game will be saved before turning off."
-	echo "##         Use the menu \"Power off\" : it will turn off without saving state."
+	echo "## Note  : Press G&W Power button     : the state of the game will be saved before turning off."
+	echo "##         Use the menu \"Power off\"   : it will turn off without saving state."
+	echo "##         Press Time button on start : skips the automatic load (of anything/game)."
+	echo "##         (ex. in case of bsod 'FATAL EXCEPTION : Watchdod reset!' / 'Failed to insert NES cart.' / 'ROM: Loading ...')"
 	echo
 	echo "## Macros"
 	cat README.md|grep "^|"|grep -e "PAUSE/SET"|sed "s/^|/###/g"|sed "s/|$//g"|sed "s/|/:/g"
@@ -585,7 +587,7 @@ function _MiscOptions() {
 		"15" " x make clean   (reset compil' env., no G&W flash)           (make clean)" \
 		"16" " x make         (create .elf, no G&W flash)                    (make -j${nproc})" \
 		"17" " < make flash   (create .elf, G&W flash)                 (make -j${nproc} flash)" \
-		"18" " x make verbose (idem 'make' + traces)                   (make VERBOSE=1)" \
+		"18" " x make verbose (make + traces)                          (make VERBOSE=1)" \
 		"19" " ? Print/Information size (.elf)                              (make size)" \
 		""   "" \
 		"20" " ? List (my) Ubuntu mandatory packages list" \
