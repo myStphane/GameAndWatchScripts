@@ -1,8 +1,12 @@
 # Clean Ubuntu (20.04) & G&W Tools install
-## Vers. : 20211117
+## Vers. : 20211125
 ## Owner : myStph
-## Note  : I use as main system a Windows 10 & install Ubuntu 20.04 within an Oracle VM VirtualBox
+## Note  : I use as main system a Windows 10 & install Ubuntu 20.04 within an Oracle VM VirtualBox, with a stlink debugger (a clone STLink V2)
 ## Note  : Ubuntu on Raspberry Pi is possible (not tested): https://ubuntu.com/download/raspberry-pi 
+## Initial Sources (thx to the owners for delivery & help!):
+### Backup : https://github.com/ghidraninja/game-and-watch-backup
+### retro-go: https://github.com/kbeckmann/game-and-watch-retro-go
+### Discord : https://discord.gg/vVcwrrHTNJ
 
 
 
@@ -48,6 +52,7 @@
 # For all needed Ubuntu packages, please check below...
 ## Note: for any below command containing "<Xxxx>", do not specify the "<" and ">": this means you have to choose/select the value you'll specify in the command
 ### like <debugger> => choose one of stlink, jlink or rpi // <mario|selda> => choose one of mario or zelda
+
 
 
 # -------------------------------------------------
