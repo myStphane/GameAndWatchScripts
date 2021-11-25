@@ -46,7 +46,8 @@
 ## Exec: sudo apt install git
 
 # For all needed Ubuntu packages, please check below...
-
+## Note: for any below command containing "<Xxxx>", do not specify the "<" and ">": this means you have to choose/select the value you'll specify in the command
+### like <debugger> => choose one of stlink, jlink or rpi // <mario|selda> => choose one of mario or zelda
 
 
 # -------------------------------------------------
