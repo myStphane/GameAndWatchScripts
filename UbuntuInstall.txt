@@ -1,7 +1,10 @@
 # Clean Ubuntu (20.04) & G&W Tools install
 ## Vers. : 20211125
 ## Owner : myStph
-## Note  : I use as main system a Windows 10 & install Ubuntu 20.04 within an Oracle VM VirtualBox, with a stlink debugger (a clone STLink V2)
+## (my) context :
+### I use as main system a Windows 10 & install Ubuntu 20.04 within an Oracle VM VirtualBox
+### with a stlink debugger (a clone STLink V2)
+### on a Game & Watch [mario|zelda] with the original chip (no new soldered).
 ## Note  : Ubuntu on Raspberry Pi is possible (not tested): https://ubuntu.com/download/raspberry-pi 
 ## Initial Sources (thx to the owners for delivery & help!):
 ### Backup : https://github.com/ghidraninja/game-and-watch-backup
@@ -115,11 +118,12 @@
 ## Exec: ./3_backup_internal_flash.sh <debugger> <mario|zelda>
 ## Exec: ./4_unlock_device.sh <debugger> <mario|zelda>
 ## Exec: ./5_restore.sh <debugger> <mario|zelda>
-## For rollback (in case of problem on Step 3.)
-### Exec: ./restore_only_external_flash.sh <debugger> <mario|zelda>
-### Deprecated (no more used):
-#### Note: maintain the Power Button pressed, then,
-#### Exec: ./scripts/flashloader.sh stlink ./backups/flash_backup.bin)
+### Note: All Scripts are mandatory from 1. to 4. // Script 5 is not mandatory if you plan to directly install the "retro-go" env., but, is a good way to verify that everything works before moving on
+### Note: For a rollback (in case of problem on Step 3.)
+#### Exec: ./restore_only_external_flash.sh <debugger> <mario|zelda>
+#### Deprecated (no more used):
+##### Note: maintain the Power Button pressed, then,
+##### Exec: ./scripts/flashloader.sh stlink ./backups/flash_backup.bin)
 
 
 
