@@ -2,7 +2,7 @@
 # Source : https://github.com/kbeckmann/game-and-watch-retro-go
 # Discord: https://discord.com/channels/781528730304249886/784362150793707530
 # -------------------------------------------------
-# Script: 20211118
+# Script: 20211203
 # Owner : myStph
 # -------------------------------------------------
 
@@ -67,6 +67,7 @@ export BKP_Folder=/mnt/share/bkp
 export BKP_NbToList=5
 
 # myPatch(s) & tools
+export myTools_Folder=../game-and-watch-mytools
 mkdir -p ../game-and-watch-mytools 2>/dev/null
 
 
@@ -87,6 +88,16 @@ function _myPause() {
 }
 
 # =================================================
+function _myRetroGoURLs() {
+	echo "# Main useful links:"
+	echo "## git backup   : https://github.com/ghidraninja/game-and-watch-backup (the README = main page when you reach the URL)"
+	echo "## git retro-go : https://github.com/kbeckmann/game-and-watch-retro-go (the README = main page when you reach the URL)"
+	echo "## Pinned guide : https://docs.google.com/document/d/1-x6tibLxtOPf6ZbQL0ZM48XGe1-LLEfl8HpBg8gBu_M/edit (within Discord)"
+	echo "## stacksmashing video     : https://www.youtube.com/watch?v=-MzmoEFs0bQ (mainly from 2:17 to 4:25)"
+	echo "## (my) Google Doc.        : https://docs.google.com/document/d/1Eh8K309A5QMHd1iv1lm_Zd7EstZ42Sgaa8ed8rIN72I/edit#"
+	echo "## (my) txt Ubuntu install : https://github.com/myStphane/GameAndWatchScripts/blob/main/UbuntuInstall.txt "
+	echo "## Quick LinuxForDummies   : https://github.com/myStphane/GameAndWatchScripts/blob/main/LinuxCommandsForDummies.txt"
+}
 function _myRetroGoKeys() {
 	echo "# G&W Screen"
 	echo "## GAME  : About & Debug"
@@ -100,10 +111,10 @@ function _myRetroGoKeys() {
 	echo "## TIME  : SELECT/Pause game"
 	echo "## PAUSE : Emulator menu (Save/Reload/Options.../Quit)"
 	echo
-	echo "## Note  : Press G&W Power button     : the state of the game will be saved before turning off."
-	echo "##         Use the menu \"Power off\"   : it will turn off without saving state."
-	echo "##         Press Time button on start : skips the automatic load (of anything/game)."
-	echo "##         (ex. in case of bsod 'FATAL EXCEPTION : Watchdod reset!' / 'Failed to insert NES cart.' / 'ROM: Loading ...')"
+	echo "## Note  : Press G&W Power button         : the state of the game will be saved before turning off."
+	echo "##         Use the menu option \"Power off\": it will turn off without saving state."
+	echo "##         Hold down Time button on start : skips the automatic load (start the retro-go gui instead of the last ROM as a fallback)."
+	echo "###        (ex. in case of bsod 'FATAL EXCEPTION : Watchdod reset!' / 'Failed to insert NES cart.' / 'ROM: Loading ...')"
 	echo
 	echo "## Macros"
 	cat README.md|grep "^|"|grep -e "PAUSE/SET"|sed "s/^|/###/g"|sed "s/|$//g"|sed "s/|/:/g"
@@ -166,7 +177,8 @@ function _mySanityCheckDebugger() {
 	else
 		echo "        $RetVal (OK)"
 	fi
-	echo
+}
+function _mySanityCheckUSB() {
 	echo "# USB devices (lsusb)"
 	lsusb|sed "s/^/        /g"
 }
@@ -222,6 +234,8 @@ function _mySanityCheck() {
 	echo
 	echo "1.7) Debugger"
 	_mySanityCheckDebugger
+	echo
+	_mySanityCheckUSB
 	echo
 	echo "# Ex. details for 'STLink-V2' and Oracle VM VirtualBox"
 	echo "## USB 'ST-LINK V2' device  : Led *should* remains fixed blue (else: reboot host/VM)"
@@ -294,7 +308,7 @@ function _RomsGWListAll() {
 	# find . -name *\*| grep -ie sms$ -ie nes$ -ie pce$ -ie gg$ -ie gb$ | more
 	# du -hc .| grep total
 	OPTION=$(whiptail --nocancel \
-		--title "Game & Watch retro-go" \
+		--title "Game & Watch [roms]" \
 		--menu "\nChoose a rom folder :" 15 60 6 \
 		"1" " gb" \
 		"2" " gg" \
@@ -355,10 +369,16 @@ function _RomsGWListSize() {
 	# done
 	tree -s --noreport ./roms
 	du -c -b ./roms|grep "total"
-	# du -c -b ./roms/*/*.${compress}|sed "s/total/total (.${compress} only)/g"|grep "total"
-	du -c -b ./roms/*/*.lz4|sed "s/total/total (.lza only)/g"|grep "total"
 	du -c -b ./roms/*/*.lzma|sed "s/total/total (.lzma only)/g"|grep "total"
-	du -c -b ./roms/*/*.zopfli|sed "s/total/total (.zopfli only)/g"|grep "total"
+	#du -c -b ./roms/*/*.${compress}|sed "s/total/total (.${compress} only)/g"|grep "total"
+	#du -c -b ./roms/*/*.lz4|sed "s/total/total (.lza only)/g"|grep "total"
+	#du -c -b ./roms/*/*.zopfli|sed "s/total/total (.zopfli only)/g"|grep "total"
+}
+# -------------------------------------------------
+function _elfMakeSize() {
+	echo "# Print size nformation for current built .elf file (make size)"
+	make size>../game-and-watch-mytools/elf.size
+	cat ../game-and-watch-mytools/elf.size
 }
 # -------------------------------------------------
 function _RomsGWShell() {
@@ -401,20 +421,20 @@ function _SavesBackup() {
 	time ./scripts/saves_backup.sh build/gw_retro_go.elf
 	find . -name *.save -exec md5sum {} \; > ../game-and-watch-mytools/md5sum.save_after
 	echo
-	echo "# sdiff md5sum ./save_states files (before vs after)"
+	echo "# sdiff md5sum ./save_states files 'before vs after'"
 	# sdiff ../game-and-watch-mytools/md5sum.save_before ../game-and-watch-mytools/md5sum.save_after
 	diff ../game-and-watch-mytools/md5sum.save_before ../game-and-watch-mytools/md5sum.save_after|grep ">"
 }
 
 # =================================================
 function _BackupBuildAndRomsAsSav() {
-	export BKP_FolderDate=${BKP_Folder}/`date +'%Y%m%d_%H%M%S'`.sav
+	export BKP_FolderDate=${BKP_Folder}/`date +'%Y%m%d_%H%M%S'`_${GNW_TARGET}.sav
 	echo "# Fast save"
 	echo
 	echo "# ${BKP_NbToList} Last backups from $BKP_Folder"
 	ls -ltr $BKP_Folder|tail -${BKP_NbToList}
 	echo
-	echo "# Last local save(s) (sdiff md5sum ./save_states files (before vs after))"
+	echo "# Last local save(s) (sdiff md5sum ./save_states files 'before vs after')"
 	# sdiff ../game-and-watch-mytools/md5sum.save_before ../game-and-watch-mytools/md5sum.save_after
 	diff ../game-and-watch-mytools/md5sum.save_before ../game-and-watch-mytools/md5sum.save_after|grep ">"
 	echo
@@ -428,6 +448,10 @@ function _BackupBuildAndRomsAsSav() {
 	echo "# local  git log game-and-watch-retro-go: `git log|sed "s/commit //g"|head -3`" >> $BKP_FolderDate/game-and-watch.git
 	echo "# Backup ./build/gw_retro_go*.* files"
 	cp --preserve=timestamps build/gw_retro_go*.* $BKP_FolderDate/build
+	echo "# Backup .elf size (make size)"
+	# make size>$BKP_FolderDate/elf.size
+	make size>../game-and-watch-mytools/elf.size
+	cp ../game-and-watch-mytools/elf.size $BKP_FolderDate
 	echo "# Backup ./roms files"
 	cp -R --preserve=timestamps roms/ $BKP_FolderDate
 	echo "# Backup ./save_states files"
@@ -448,7 +472,7 @@ function _BackupBuildAndRomsAsSav() {
 }
 # -------------------------------------------------
 function _BackupGWFolderAsTgz() {
-	export BKP_FolderDate=${BKP_Folder}/`date +'%Y%m%d_%H%M%S'`.tgz
+	export BKP_FolderDate=${BKP_Folder}/`date +'%Y%m%d_%H%M%S'`_${GNW_TARGET}.tgz
 	git_github=`git ls-remote git://${URL_retrogo}|head -1|awk '{print $1}'`
 	git_local=`git log|sed "s/commit //g"|head -1`
 	if [ "$git_github" == "$git_local" ] ; then git_cmp=" (OK)" ; else git_cmp=" (KO: older)"; fi
@@ -564,7 +588,7 @@ function _KillOpenocd() {
 function _MiscOptions() {
 	OPTION=$(whiptail --nocancel \
 		--title "Game & Watch retro-go Options" \
-		--menu "\nChoose an action :" 37 90 28 \
+		--menu "\nChoose an action :" 38 90 29 \
 		 "0" " ? List retro-go Keys & Macro" \
 		 ""  "" \
 		 "1" " # List share available roms                 (all: gb, gg, nes, pce, sms)" \
@@ -577,6 +601,11 @@ function _MiscOptions() {
 		 "7" " ? List all performed backups                               (.sav & .tgz)" \
 		 "8" " ? List 2 lasts local screenshots                                  (.png)" \
 		 ""  "" \
+	 "Ab" " > Backup  current  gw_retro_go* build                (to build_${GNW_TARGET}_A/)" \
+	 "Ar" " < Restore previous gw_retro_go* build              (from build_${GNW_TARGET}_A/)" \
+	 "Bb" " > Backup  current  gw_retro_go* build                (to build_${GNW_TARGET}_B/)" \
+	 "Br" " < Restore previous gw_retro_go* build              (from build_${GNW_TARGET}_B/)" \
+	 ""  "" \
 		 "9" " ? Full Sanity check                           (env., git, OpenOCD & GCC)" \
 		"10" " ? Show 'make help'                                           (make help)" \
 		""   "" \
@@ -591,6 +620,7 @@ function _MiscOptions() {
 		"19" " ? Print/Information size (.elf)                              (make size)" \
 		""   "" \
 		"20" " ? List (my) Ubuntu mandatory packages list" \
+		"21" " ? Useful links" \
 		""   "" \
 		" " " Back to main menu" 3>&1 1>&2 2>&3)
 	exitstatus=$?
@@ -652,6 +682,34 @@ function _MiscOptions() {
 				# _myPause
 				_ScreenshotList
 			;;
+
+		# -------------------------------------------------
+		Ab)	_mySeparator
+			export tkn_Folder=${myTools_Folder}/build_${GNW_TARGET}_A
+			echo "Ab) Backup  from ./build to $tkn_Folder"
+			_BackupBuildTarget
+		;;
+
+		# -------------------------------------------------
+		Ar)	_mySeparator
+			export tkn_Folder=${myTools_Folder}/build_${GNW_TARGET}_A
+			echo "Ar) Restore from $tkn_Folder to ./build"
+			_RestoreBuildTarget
+		;;
+
+		# -------------------------------------------------
+		Bb)	_mySeparator
+			export tkn_Folder=${myTools_Folder}/build_${GNW_TARGET}_B
+			echo "Bb) Backup  from ./build to $tkn_Folder"
+			_BackupBuildTarget
+		;;
+
+		# -------------------------------------------------
+		Br)	_mySeparator
+			export tkn_Folder=${myTools_Folder}/build_${GNW_TARGET}_B
+			echo "Br) Restore from $tkn_Folder to ./build"
+			_RestoreBuildTarget
+		;;
 
 			# -------------------------------------------------
 			9)	_mySeparator
@@ -724,10 +782,8 @@ function _MiscOptions() {
 
 			# -------------------------------------------------
 			19)	_mySeparator
-				echo "19) Print size (for current built .elf file)"
-				echo "# make size"
-				 _myPause
-				make size
+				echo "19) Print size information"
+				_elfMakeSize
 			;;
 
 			# -------------------------------------------------
@@ -735,6 +791,12 @@ function _MiscOptions() {
 				echo "20) Ubuntu mandatory packages list"
 				cat UbuntuInstall.txt
 				# _myPause
+			;;
+
+			# -------------------------------------------------
+			21)	_mySeparator
+				echo "21) Useful URLs & doc."
+				_myRetroGoURLs
 			;;
 
 			" ")	echo "# Exit...";;
@@ -754,11 +816,11 @@ function _MiscOptions() {
 stay=true
 function _QueryDebuggerAdapter() {
 	OPTION=$(whiptail --nocancel \
-		--title "Game & Watch retro-go" \
+		--title "Game & Watch [debugger]" \
 		--menu "\nChoose a debugger :" 15 60 6 \
-		"1" " ST-Link" \
-		"2" " J-Link" \
-		"3" " Raspberry pi" \
+		"1" " ST-Link        (=stlink)" \
+		"2" " J-Link         (=jlink)" \
+		"3" " Raspberry pi   (=rpi)" \
 		"" " " \
 		" " " Exit" 3>&1 1>&2 2>&3)
 	exitstatus=$?
@@ -787,7 +849,7 @@ fi
 stay=true
 function _QueryGnW() {
 	OPTION=$(whiptail --nocancel \
-		--title "Game & Watch model" \
+		--title "Game & Watch [model]" \
 		--menu "\nChoose a G&W (mario|zelda) :" 14 60 4 \
 		"1" " mario" \
 		"2" " zelda" \
@@ -808,14 +870,77 @@ function _QueryGnW() {
 }
 _QueryGnW
 
+
+
+
+function _BackupBuildTarget() {
+	mkdir -p $tkn_Folder 2>/dev/null
+	echo
+	echo "# Actual backuped content of $tkn_Folder"
+	ls -l $tkn_Folder
+	echo
+	echo "# Actual backuped .elf size"
+	cat ${tkn_Folder}/elf.size|grep -v "BASH"
+	echo
+	echo "# Actual backuped Rom file list"
+	cat ${tkn_Folder}/rom.list
+	echo
+	echo "# Backup ?        (1/2)"
+	_myPause
+	echo
+	echo "# Really Backup ? (2/2)"
+	_myPause
+	echo
+	echo "# Backup ./build/gw_retro_go*.* files"
+	cp --preserve=timestamps build/gw_retro_go*.* ${tkn_Folder}
+	echo "# Backup .elf size (make size)"
+	make size>${tkn_Folder}/elf.size
+	echo "# Backup Rom file list"
+	ls -lR roms/| grep -e "roms/" -e "^-">${tkn_Folder}/rom.list
+	echo "# Done"
+	# echo "# Content of $tkn_Folder"
+	# ls -l $tkn_Folder
+}
+
+function _RestoreBuildTarget() {
+	mkdir -p $tkn_Folder 2>/dev/null
+	echo
+	echo "# Actual backuped content of $tkn_Folder"
+	mkdir -p $tkn_Folder 2>/dev/null
+	ls -l $tkn_Folder
+	echo
+	echo "# Actual backuped .elf size"
+	cat ${tkn_Folder}/elf.size|grep -v "BASH"
+	echo
+	echo "# Actual backuped Rom file list"
+	cat ${tkn_Folder}/rom.list
+	echo
+	echo "# Restore ?        (1/2)"
+	_myPause
+	echo
+	echo "# Really Restore ? (2/2)"
+	_myPause
+	echo
+	echo "# Restore ./build/gw_retro_go*.* files to ./build"
+	cp --preserve=timestamps ${tkn_Folder}/gw_retro_go*.* ./build
+	echo "# Done"
+}
+
+
+
+
+
+
 # =================================================
 # MAIN MENU
 # =================================================
+	#--menu "\nChoose an action :                 [ $GNW_TARGET ]" 31 90 22 \
+	#--menu "\nChoose an action [$GNW_TARGET]:" 31 90 22 \
 while [ $stay = true ]
 do
 	OPTION=$(whiptail --nocancel \
-	--title "Game & Watch retro-go" \
-	--menu "\nChoose an action :" 23 90 14 \
+	--title "Game & Watch retro-go [$ADAPTER/$GNW_TARGET]" \
+	--menu "\nChoose an action:" 26 90 17 \
 	 "0" " ? Quick Sanity check" \
 	 "1" " # Misc. options sub-menu" \
 	 ""  "" \
@@ -823,15 +948,16 @@ do
 	 "3" " * Patch interface_stlink.cfg                         (adapter speed 200)" \
 	 "4" " * git Update game-and-watch-retro-go               (git pull+clean+make)" \
 	 ""  "" \
+	 "L" " ? List current roms                                     (tree -s ./roms)" \
+	 "C" " x Clean build env.                                          (make clean)" \
 	 "5" " < Build (retro-go+rom) & flash *to* G&W                     (make flash)" \
-	 "6" " < Restore Save states *to*   G&W                      (saves_restore.sh)" \
+	 "6" " < Restore Save states *to* G&W *from* local           (saves_restore.sh)" \
 	 ""  "" \
-	 "7" " > Backup  Save states *from* G&W                       (saves_backup.sh)" \
-	 "8" " > Backup  Screenshot  *from* G&W                  (make dump_screenshot)" \
+	 "7" " > Backup  Save states *from* G&W *to* local            (saves_backup.sh)" \
+	 "8" " > Backup  Screenshot  *from* G&W *to* local       (make dump_screenshot)" \
+	 "9" " > Backup ./build (~.elf) & ./roms & ./save_states                 (.sav)" \
 	 ""  "" \
 	 " " " Exit" 3>&1 1>&2 2>&3)
-	 # "4" " * git Update game-and-watch-retro-go               (git pull+clean+make)" \
-	 # "8" " > Backup  Screenshot  *from* G&W            (needs: ENABLE_SCREENSHOT=1)" \
 
 	exitstatus=$?
 	if [ $exitstatus = 0 ]; then
@@ -849,6 +975,8 @@ do
 			_mySanityCheckOpenocd
 			echo
 			_mySanityCheckDebugger
+			echo
+			_mySanityCheckUSB
 			echo
 		;;
 
@@ -871,6 +999,22 @@ do
 			echo "3) Apply myPatch(s) ?"
 			_myPause
 			_UpdateGWApplymyPatch
+		;;
+
+		# -------------------------------------------------
+		C)	_mySeparator
+			echo "C) make clean (clean env.)"
+			_myPause
+			time make clean
+		;;
+		
+		# -------------------------------------------------
+		L)	_mySeparator
+			echo "L) List roms in .\roms folder"
+			# ls -lR ./roms |grep -v ^total|grep -v ^$|grep -v ^d|grep -v "./roms:"
+			tree -s --noreport ./roms
+			du -c -b ./roms/*/*.*|grep -v ".lzam"|grep "total"
+			du -c -b ./roms/*/*.lzma|sed "s/total/total (.lzma only)/g"|grep "total"
 		;;
 
 		# -------------------------------------------------
@@ -900,6 +1044,7 @@ do
 			echo "##               Then 'Build and Flash (retro-go + roms)' again!"
 			echo
 			_UpdateGWMakeFlashRetroGoRom
+			_elfMakeSize
 			_RomsGWListSize
 		;;
 
@@ -913,6 +1058,7 @@ do
 		# -------------------------------------------------
 		7)	_mySeparator
 			echo "7) Backup locally save states from G&W"
+			_mySanityCheckDebugger
 			# _myPause
 			_SavesBackup
 		;;
@@ -922,6 +1068,12 @@ do
 			echo "8) Save Screenshot locally *from* G&W" 
 			# _myPause
 			_ScreenshotDump
+		;;
+
+		# -------------------------------------------------
+		9)	_mySeparator
+			echo "9) Backup ./build (.elf) & ./roms & ./save_states files to ${BKP_Folder}/<DATE>_<TIME>"
+			_BackupBuildAndRomsAsSav
 		;;
 
 		# -------------------------------------------------
