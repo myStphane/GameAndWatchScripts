@@ -44,7 +44,7 @@ Additional used documentation:
 - (my) Game & Watch Backup, ie, my Google Doc “step-by-step”: https://docs.google.com/document/d/1Eh8K309A5QMHd1iv1lm_Zd7EstZ42Sgaa8ed8rIN72I/
  
 
-## retro-go.sh & UbuntuInstall.txt
+## retro-go.sh (& UbuntuInstall.txt)
 Aim: (my) retro-go menu / Ubuntu
 
 - Source : https://github.com/kbeckmann/game-and-watch-retro-go
