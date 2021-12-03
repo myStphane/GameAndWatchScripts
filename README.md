@@ -11,6 +11,7 @@ Notes:
 - Backup: https://github.com/ghidraninja/game-and-watch-backup (the README)
 - retro-go: https://github.com/kbeckmann/game-and-watch-retro-go (the README)
   - LCD Game shrinker: https://gist.github.com/DNA64/16fed499d6bd4664b78b4c0a9638e4ef
+  - For covers "option": https://discord.com/channels/781528730304249886/783282561001717771/915175310377504799
 - (video) https://www.youtube.com/watch?v=-MzmoEFs0bQ (mainly from 2:17 to 4:25)
 - (Discord channed) pinned guide: https://docs.google.com/document/d/1-x6tibLxtOPf6ZbQL0ZM48XGe1-LLEfl8HpBg8gBu_M/edit
 - (my) Backup & unlock Google Doc: https://docs.google.com/document/d/1Eh8K309A5QMHd1iv1lm_Zd7EstZ42Sgaa8ed8rIN72I/edit#
