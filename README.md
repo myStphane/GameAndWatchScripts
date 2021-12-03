@@ -10,6 +10,7 @@ Notes:
 ## Main sources for Backup(& unlock), retro-go + Ubuntu guides
 - Backup: https://github.com/ghidraninja/game-and-watch-backup (the README)
 - retro-go: https://github.com/kbeckmann/game-and-watch-retro-go (the README)
+  - LCD Game shrinker: https://gist.github.com/DNA64/16fed499d6bd4664b78b4c0a9638e4ef
 - (video) https://www.youtube.com/watch?v=-MzmoEFs0bQ (mainly from 2:17 to 4:25)
 - (Discord channed) pinned guide: https://docs.google.com/document/d/1-x6tibLxtOPf6ZbQL0ZM48XGe1-LLEfl8HpBg8gBu_M/edit
 - (my) Backup & unlock Google Doc: https://docs.google.com/document/d/1Eh8K309A5QMHd1iv1lm_Zd7EstZ42Sgaa8ed8rIN72I/edit#
@@ -61,3 +62,6 @@ Note:
 Missing:
 - git "install" section (even if there is a git update one, I guess some folder(s) pre-creation and "git init" actions may be "enougth" => need to improve my script).
 - nevertheless, one can follow the _README_ docs. from both G&W git repositories & my current _UbuntuInstall.txt_ file
+
+## Warning note
+Use all as it is, at your own risk...
