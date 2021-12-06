@@ -170,6 +170,7 @@
 # -------------------------------------------------
 # Not mandatory:
 ## Additional "tool" to exec. the NES emulator directly *under* Ubuntu (without flashing it to g&w):
+## Note: audio probably is broken (aka not fully implemented)
 ### Exec: sudo apt-get install -y libsdl2-dev
 ### Exec: cd linux
 ### Exec: ./update_nes_rom.sh your_rom.nes
