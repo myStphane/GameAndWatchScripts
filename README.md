@@ -25,8 +25,12 @@ As named: here some linux (Ubuntu) commands for dummies, quickly explained + ex.
 
 ## UbuntuInstall.txt
 - Is a text file with all my commands ran for an Ubuntu install under an Oracle VM VirtualBox env. for G&W Backup & retro-go
-- This was a step-by-step actions & commands I followed for zero toe have a fully "G&W" installed environment (most are extracts from the G&W Backp & retro-go "README" parts & extracts from Discrod helps)
-
+- This was a step-by-step actions & commands I followed for zero, to have a fully "G&W" installed environment
+  - most are extracts from the G&W Backp & retro-go "README" parts & extracts from Discrod helps
+  - env.:
+    - Linux VM installed tools/apps
+    - backup (unlock) tools from stacksmashing (ghidraninja)
+    - retro-go install tools from kbeckmann
 
 
 ## 0_menu.sh
