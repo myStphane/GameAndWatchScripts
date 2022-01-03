@@ -2,7 +2,7 @@
 my Game &amp; Watch Script (Backup &amp; retro-go) & other "help" files
 
 Notes:
-- On any script run, for each option/action, a user key-press is requested, to avoid any miss run actions => user can press Ctrl+C to abort it.
+- On any script run, for each option/action, a user key-press is requested, to avoid any miss run actions => user can press Ctrl+C to abort it
 - Debugger: I use a *ST-Link V2* (Clone) debugger, however, the debugger is always asked to user on script start
 - Game & Watch: I use (actually) a *G&W Super Mario Bros.* version (not the new Zelda one), however, the G&W model type is asked to user on script start
 
@@ -40,7 +40,6 @@ Aim: (my) menu / Ubuntu for the G&W Backup tools
 Mandatory:
 - Having flashed (& backup/unlocked) your device
 
-
 Process:
 - Copy the *0_menu.sh* in root menu of your game-and-watch-backup folder
 - Make it executable (`chmod +x 0_menu.sh`)
@@ -75,5 +74,3 @@ Missing:
 
 ## Warning note
 Use all as it is, at your own risk...
-
-
