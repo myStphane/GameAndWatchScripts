@@ -176,3 +176,10 @@
 ### Exec: ./update_nes_rom.sh your_rom.nes
 ### Exec: make -f Makefile.nes -j && ./build/retro-go-nes.elf
 ## Note: should also work for GB, with "update_gb_rom.sh" script
+
+
+
+# -------------------------------------------------
+# On error part
+## Err: /home/Heyyyooo/Documents/gcc-arm-none-eabi-10.3-2021.10/bin/arm-none-eabi-gdb: error while loading shared libraries: libncurses.so.5: cannot open shared object file
+## Solution: sudo apt-get install libncurses5
